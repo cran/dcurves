@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Decision Curve Analysis</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Decision Curve Analysis</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dcurves)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary); <span class="fu">library</span>(dplyr); <span class="fu">library</span>(tidyr)</span></code></pre></div>
+<p>Diagnostic and prognostic models are typically evaluated with measures of accuracy that do not address clinical consequences. Decision-analytic techniques allow assessment of clinical outcomes but often require collection of additional information and may be cumbersome to apply to models that yield a continuous result. Decision curve analysis is a method for evaluating and comparing prediction models that incorporates clinical consequences, requires only the data set on which the models are tested, and can be applied to models that have either continuous or dichotomous results. This document will walk you through how to perform a decision curve analysis (DCA) in many settings, and how to interpret the resulting curves. In DCA prediction models are compared to two default strategies: 1) assume that all patients are test positive and therefore treat everyone, or 2) assume that all patients are test negative and offer treatment to no one. “Treatment” is considered in the widest possible sense, not only drugs, radiotherapy or surgery, but advice, further diagnostic procedures or more intensive monitoring. For more details on DCA, visit <a href="https://www.mskcc.org/departments/epidemiology-biostatistics/biostatistics/decision-curve-analysis">www.decisioncurveanalysis.org</a>. You’ll find the original articles explaining the details of the DCA derivation along with other papers providing more details. Below we’ll walk you through how to perform DCA for binary and time-to-event outcomes</p>
+<div id="binary-outcomes" class="section level2">
+<h2>Binary Outcomes</h2>
+<div id="univariate-decision-curve-analysis" class="section level3">
+<h3>Univariate Decision Curve Analysis</h3>
+<p>We’ll be working with the example dataset <code>df_binary</code> included with the package. The dataset includes information on 750 patients who have recently discovered they have a gene mutation that puts them at a higher risk for harboring cancer. Each patient has been biopsied and we know their cancer status. It is known that older patients with a family history of cancer have a higher probability of harboring cancer. A clinical chemist has recently discovered a marker that she believes can distinguish between patients with and without cancer. We wish to assess whether or not the new marker does indeed identify patients with and without cancer. If the marker does indeed predict well, many patients will not need to undergo a painful biopsy.</p>
+<p>First, we want to confirm family history of cancer is indeed associated with the biopsy result.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(cancer <span class="sc">~</span> famhistory, df_binary, <span class="at">family =</span> binomial)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(mod, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>tbl</span></code></pre></div>
+<div id="kgqbtghkwq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#kgqbtghkwq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kgqbtghkwq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kgqbtghkwq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kgqbtghkwq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kgqbtghkwq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kgqbtghkwq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kgqbtghkwq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kgqbtghkwq .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kgqbtghkwq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kgqbtghkwq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kgqbtghkwq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kgqbtghkwq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kgqbtghkwq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#kgqbtghkwq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kgqbtghkwq .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kgqbtghkwq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kgqbtghkwq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#kgqbtghkwq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kgqbtghkwq .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#kgqbtghkwq .gt_left {
+  text-align: left;
+}
+
+#kgqbtghkwq .gt_center {
+  text-align: center;
+}
+
+#kgqbtghkwq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kgqbtghkwq .gt_font_normal {
+  font-weight: normal;
+}
+
+#kgqbtghkwq .gt_font_bold {
+  font-weight: bold;
+}
+
+#kgqbtghkwq .gt_font_italic {
+  font-style: italic;
+}
+
+#kgqbtghkwq .gt_super {
+  font-size: 65%;
+}
+
+#kgqbtghkwq .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>OR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">famhistory</td>
+<td class="gt_row gt_center">1.80</td>
+<td class="gt_row gt_center">1.07, 2.96</td>
+<td class="gt_row gt_center">0.022</td></tr>
+  </tbody>
+  
+  <tfoot>
+    <tr class="gt_footnotes">
+      <td colspan="4">
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks">
+            <em>1</em>
+          </sup>
+           
+          OR = Odds Ratio, CI = Confidence Interval
+          <br />
+        </p>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+<p>Via logistic regression with cancer as the outcome, we can see that family history is related to biopsy outcome OR 1.80 (95% CI 1.07, 2.96; p=0.022). The DCA can help us address the clinical utility of using family history to predict biopsy outcome.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(cancer <span class="sc">~</span> famhistory, df_binary) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>First, note that there are many threshold probabilities shown here that are not of interest. For example, it is unlikely that a patient would demand that they had at least a 50% risk of cancer before they would accept a biopsy. Let’s do the DCA again, this time restricting the output to threshold probabilities a more clinically reasonable range, between 0% and 35%.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(cancer <span class="sc">~</span> famhistory, df_binary, <span class="at">thresholds =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.35</span>, <span class="at">by =</span> <span class="fl">0.01</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Now that the graph is showing a more reasonable range of threshold probabilities, let’s assess the clinical utility of family history alone. We can see here that although family history is significantly associated with biopsy outcome, it only adds value to a small range of threshold probabilities near 13% - 20%. If your personal threshold probability is 15% (i.e. you would undergo a biopsy if your probability of cancer was greater than 15%), then family history alone can be beneficial in making the decision to undergo biopsy. However, if your threshold probability is less than 13% or higher than 20%, then family history adds no more benefit than a biopsy all, or biopsy none scheme.</p>
+</div>
+<div id="multivariable-decision-curve-analysis" class="section level3">
+<h3>Multivariable Decision Curve Analysis</h3>
+<div id="evaluation-of-new-models" class="section level4">
+<h4>Evaluation of New Models</h4>
+<p>We wanted to examine the value of a statistical model that incorporates family history, age, and the marker. First we will build the logistic regression model with all three variables, and second we would have saved out the predicted probability of having cancer based on the model. Note that in our example data set, this variable actually already exists so it wouldn’t be necessary to create the predicted probabilities once again.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(cancer <span class="sc">~</span> marker <span class="sc">+</span> age <span class="sc">+</span> famhistory, df_binary, <span class="at">family =</span> binomial) <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">augment</span>(<span class="at">newdata =</span> df_binary, <span class="at">type.predict =</span> <span class="st">&quot;response&quot;</span>) </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 750 x 9</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    patientid cancer  dead risk_group     age famhistory marker cancerpredmarker</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        &lt;dbl&gt; &lt;lgl&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1         1 FALSE      0 low           64.0          0 0.776           0.0372 </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2         2 FALSE      0 high          78.5          0 0.267           0.579  </span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3         3 FALSE      0 low           64.1          0 0.170           0.0216 </span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4         4 FALSE      0 low           58.5          0 0.0240          0.00391</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5         5 FALSE      0 low           64.0          0 0.0709          0.0188 </span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6         6 FALSE      0 intermediate  65.7          0 0.428           0.0426 </span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7         7 FALSE      1 intermediate  71.9          0 0.942           0.296  </span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8         8 TRUE       0 intermediate  66.6          0 2.91            0.387  </span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9         9 FALSE      0 low           64.3          0 0.715           0.0373 </span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10        10 FALSE      0 intermediate  65.7          0 0.129           0.0320 </span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ... with 740 more rows, and 1 more variable: .fitted &lt;dbl&gt;</span></span></code></pre></div>
+<p>We now want to compare our different approaches to cancer detection: biopsying everyone, biopsying no-one, biopsying on the basis of family history, or biopsying on the basis of a multivariable statistical model including the marker, age and family history of cancer.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(cancer <span class="sc">~</span> famhistory <span class="sc">+</span> cancerpredmarker, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_binary, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">thresholds =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.35</span>, <span class="at">by =</span> <span class="fl">0.01</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The key aspect of decision curve analysis is to look at which strategy leads to the largest net benefit (i.e. the “highest” line), which in this example would correspond to the model that includes age, family history of cancer, and the marker. It is clear that, across the range of reasonable threshold probabilities, one cannot go wrong basing decisions on this multivariate model: it is superior, and unlike any alternative strategy, it is never worse.</p>
+<p>A few points are worth noting. First, look at the green line, the net benefit for “treat all”, that is, biopsy everyone. This crosses the y axis at the prevalence. Imagine that a man had a risk threshold of 14%, and asked his risk under the “biopsy all” strategy. He would be told that his risk was the prevalence (14%). When a patient’s risk threshold is the same as his predicted risk, the net benefit of biopsying and not biopsying are the same. Second, the decision curve for the binary variable (family history of cancer, the brown line) crosses the “biopsy all men” line at 1 – negative predictive value and again, this is easily explained: the negative predictive value is 87%, so a patient with no family history of cancer has a probability of disease of 13%; a patient with a threshold probability less than this – for example, a patient who would opt for biopsy even if risk was 10% - should therefore be biopsied even if he/she had no family history of cancer. The decision curve for a binary variable is equivalent to biopsy no-one at the positive predictive value. This is because for a binary variable, a patient with the characteristic is given a risk at the positive predictive value.</p>
+</div>
+<div id="evaluation-of-published-models" class="section level4">
+<h4>Evaluation of Published Models</h4>
+<p>Imagine that a model was published by Brown et al. with respect to our cancer biopsy data set. The authors reported a statistical model with coefficients of 0.75 for a positive family history of cancer; 0.26 for each increased year of age, and an intercept of -17.5. To test this formula on our dataset:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_binary_updated <span class="ot">&lt;-</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  df_binary <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use the coefficients from the Brown model</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">logodds_Brown =</span> <span class="fl">0.75</span> <span class="sc">*</span> (famhistory) <span class="sc">+</span> <span class="fl">0.26</span> <span class="sc">*</span> (age) <span class="sc">-</span> <span class="fl">17.5</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to predicted probability</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">phat_Brown =</span> <span class="fu">exp</span>(logodds_Brown) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(logodds_Brown))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the decision curve</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(cancer <span class="sc">~</span> phat_Brown, df_binary_updated, <span class="at">thresholds =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.35</span>, <span class="at">by =</span> <span class="fl">0.01</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>This decision curve suggests that although the model might be useful in the most risk averse patients, it is actually harmful in patients with more moderate threshold probabilities. As such, the Brown et al. model should not be used in clinical practice. This effect, a model being harmful, occurs due to miscalibration, that is, when patients are given risks that are too high or too low. Note that miscalibration only occurs rarely when models are created and tested on the same data set, such as in the example where we created a model with both family history and the marker.</p>
+</div>
+<div id="joint-or-conditional-tests" class="section level4">
+<h4>Joint or Conditional Tests</h4>
+<p>Many decisions in medicine are based on joint or conditional test results. A classic example is where patients are categorized on the basis of a test as being at high, low or intermediate risk. Patients at high risk are referred immediately for treatment (in our example biopsied); patients at low risk are reassured and advised that no further action is necessary; patients at intermediate risk are sent for an additional test, with subsequent treatment decisions made accordingly.</p>
+<p>Imagine that for our example there was a previous test that categorized our patients as high, low, and intermediate risk of cancer and we wanted to incorporate our marker. There are five clinical options:</p>
+<ol style="list-style-type: decimal">
+<li>Biopsy everyone</li>
+<li>Biopsy no-one</li>
+<li>Biopsy everyone that was determined to be at high risk of cancer; don’t use the marker</li>
+<li>Measure the marker for everyone, then biopsy anyone who is either at high risk of cancer or who was determined to have a probability of cancer past a certain level, based on the marker (i.e. joint approach)</li>
+<li>Biopsy everyone at high risk; measure the marker for patients at intermediate risk and biopsy those with a probability of cancer past a certain level, based on the marker (i.e. conditional approach)</li>
+</ol>
+<p>Decision curve analysis can incorporate joint or conditional testing. All that is required is that appropriate variables are calculated from the data set; decision curves are then calculated as normal. First we would create the variables to represent our joint and conditional approach. For our example, let us use 0.15 as the cutoff probability level for patients who had their marker measured and should be biopsied.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_binary_updated <span class="ot">&lt;-</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  df_binary_updated <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a variable for the strategy of treating only high risk patients</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This will be 1 for treat and 0 for don&#39;t treat</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">high_risk =</span> <span class="fu">ifelse</span>(risk_group <span class="sc">==</span> <span class="st">&quot;high&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Treat based on Joint Approach</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">joint =</span> <span class="fu">ifelse</span>(risk_group <span class="sc">==</span> <span class="st">&quot;high&quot;</span> <span class="sc">|</span> cancerpredmarker <span class="sc">&gt;</span> <span class="fl">0.15</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Treat based on Conditional Approach</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">conditional =</span> <span class="fu">ifelse</span>(risk_group <span class="sc">==</span> <span class="st">&quot;high&quot;</span> <span class="sc">|</span> </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                           (risk_group <span class="sc">==</span> <span class="st">&quot;intermediate&quot;</span> <span class="sc">&amp;</span> cancerpredmarker <span class="sc">&gt;</span> <span class="fl">0.15</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Now that we have the variables worked out, we can run the decision curve analysis.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(cancer <span class="sc">~</span> high_risk <span class="sc">+</span> joint <span class="sc">+</span> conditional, </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_binary_updated, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">thresholds =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.35</span>, <span class="at">by =</span> <span class="fl">0.01</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>This appears to show that the joint test is the better option for the range of threshold probabilities from 5% - 24% since it has the highest net benefit across that range. Less than 5%, the clinical option of treating all would be superior to any other option, though rarely would treatment thresholds be so low. From 28%-35%, the conditional test would be a slightly better option, and in between the two ranges, the joint and conditional tests are comparable. The obvious disadvantage of the joint test is that the marker needs to be measured for everyone, and such tests may be expensive and time consuming.</p>
+</div>
+</div>
+<div id="incorporating-harms-into-model-assessment" class="section level3">
+<h3>Incorporating Harms into Model Assessment</h3>
+<p>To incorporate the harm of testing and measuring the marker, we ask a clinician, who tells us that, even if the marker were perfectly accurate, few clinicians would conduct more than 30 tests to predict one cancer diagnosis. This might be because the test is expensive, or requires some invasive procedure to obtain. The “harm” of measuring the marker is the reciprocal of 30, or 0.0333. To construct the decision curves for each strategy we now incorporate harm. We have to calculate harm specially for the conditional test, because only patients at intermediate risk are measured for the marker. Then incorporate it into our decision curve. The strategy for incorporating harm for the conditional test is by multiplying the proportion scanned by the harm of the scan.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the harm of measuring the marker is stored in a scalar</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>harm_marker <span class="ot">&lt;-</span> <span class="fl">0.0333</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># in the conditional test, only patients at intermediate risk have their marker measured</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>intermediate_risk <span class="ot">&lt;-</span> df_binary_updated<span class="sc">$</span>risk_group <span class="sc">==</span> <span class="st">&quot;intermediate&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># harm of the conditional approach is proportion of patients who have the marker measured multiplied by the harm</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>harm_conditional <span class="ot">&lt;-</span> <span class="fu">mean</span>(intermediate_risk) <span class="sc">*</span> harm_marker</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the decision curve </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>dca_with_harms <span class="ot">&lt;-</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dca</span>(cancer <span class="sc">~</span> high_risk <span class="sc">+</span> joint <span class="sc">+</span> conditional, </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_binary_updated, </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">harm =</span> <span class="fu">list</span>(<span class="at">joint =</span> harm_marker, <span class="at">conditional =</span> harm_conditional),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">thresholds =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.35</span>, <span class="at">by =</span> <span class="fl">0.01</span>))</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dca_with_harms, <span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Here the conditional test is clearly the best option (above the 8% treatment threshold), in fact, once you take into account the harm of measuring the marker, it is clearly not worth measuring the marker for everyone: the net benefit of just treating high risk patients is often higher than that of the joint test.</p>
+</div>
+<div id="saving-out-net-benefit-values" class="section level3">
+<h3>Saving out Net Benefit Values</h3>
+<p>For any model assessed through decision curve analysis, if we also wanted to show the net benefits in a table, we could save them out. For a particular range of value, we would only need to specify what threshold to start, stop, and the increment we’d like to use.</p>
+<p>Let us imagine that we want to view the net benefit of using only the marker to predict whether a patient has cancer, compared with the net benefits of biopsying all patients at thresholds of 5%, 10%, 15%, … 35%. For the model itself, we would actually need to first specify that the marker variable—unlike those of any of the models before—is not a probability. Based on our thresholds, we’d want to begin at 0.05, and by increments of 0.05, stop at 0.35.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dca_with_harms <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(threshold <span class="sc">%in%</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.35</span>, <span class="at">by =</span> <span class="fl">0.05</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable, threshold, net_benefit) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> threshold, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> variable,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> net_benefit)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 x 6</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   threshold     all  none high_risk    joint conditional</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1      0.05  0.0947     0    0.0168  0.0671      0.0740 </span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2      0.1   0.0444     0    0.0161  0.0571      0.0662 </span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3      0.2  -0.075      0    0.0147  0.0334      0.0475 </span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4      0.25 -0.147      0    0.0138  0.0191      0.0362 </span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5      0.3  -0.229      0    0.0128  0.00289     0.0234 </span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6      0.35 -0.323      0    0.0116 -0.0159      0.00861</span></span></code></pre></div>
+<p>Net benefit has a ready clinical interpretation. The value of 0.03 at a threshold probability of 20% can be interpreted as: “Comparing to conducting no biopsies, biopsying on the basis of the marker is the equivalent of a strategy that found 3 cancers per hundred patients without conducting any unnecessary biopsies.”</p>
+</div>
+<div id="interventions-avoided" class="section level3">
+<h3>Interventions Avoided</h3>
+<p>As part of assessing the usefulness of the marker, we would be interested in whether using this marker to identify patients with and without cancer would help reduce unnecessary biopsies. This value was the “intervention avoided” column in the table that was saved out. To view it graphically, we would only need to specify it in our command.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(cancer <span class="sc">~</span> marker, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_binary, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">as_probability =</span> <span class="st">&quot;marker&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">thresholds =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.35</span>, <span class="at">by =</span> <span class="fl">0.01</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">net_intervention_avoided</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>At a probability threshold of 15%, the net reduction in interventions is about 33 per 100 patients. In other words, at this probability threshold, biopsying patients on the basis of the marker is the equivalent of a strategy that reduced the biopsy rate by 33%, without missing any cancers.</p>
+</div>
+</div>
+<div id="survival-outcomes" class="section level2">
+<h2>Survival Outcomes</h2>
+<div id="motivating-example" class="section level3">
+<h3>Motivating Example</h3>
+<p>Patients went to have a marker measured and patients were followed to determine whether they were eventually diagnosed with cancer. We want to build a model using age, family history, and the marker, and assess how well the model predicts cancer within 1.5 years. The variables that will be used from the example dataset for this section of the tutorial are the following:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_surv <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 x 9</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   patientid cancer ttcancer risk_group    age famhistory marker cancerpredmarker</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       &lt;dbl&gt; &lt;lgl&gt;     &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1         1 FALSE    3.01   low          64.0          0 0.776           0.0372 </span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         2 FALSE    0.249  high         78.5          0 0.267           0.579  </span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3         3 FALSE    1.59   low          64.1          0 0.170           0.0216 </span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4         4 FALSE    3.46   low          58.5          0 0.0240          0.00391</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5         5 FALSE    3.33   low          64.0          0 0.0709          0.0188 </span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6         6 FALSE    0.0488 intermedia~  65.7          0 0.428           0.0426 </span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ... with 1 more variable: cancer_cr &lt;fct&gt;</span></span></code></pre></div>
+</div>
+<div id="basic-data-set-up" class="section level3">
+<h3>Basic Data Set-up</h3>
+<p>The survival probability to any time-point can be derived from any type of survival model; here we use a Cox as this is the most common model in statistical practice. The formula for a survival probability from a Cox model is given by</p>
+<p><span class="math display">\[
+S(t) = S_0(t)^{e^{X\beta}}
+\]</span></p>
+<p>Where <span class="math inline">\(X\)</span> is matrix of covariates in the Cox model, <span class="math inline">\(\beta\)</span> is a vector containing the parameter estimates from the Cox model, and <span class="math inline">\(S_0(t)\)</span> is the baseline survival probability to time <span class="math inline">\(t\)</span>. To get such values within our code, we will run a Cox model with age, family history, and the marker, as predictors, save out the baseline survival function in a new variable, and obtaining the linear prediction from the model for each subject.</p>
+<p>We then obtain the baseline survival probability to our time point of interest. If no patient was observed at the exact time of interest, we can use the baseline survival probability to the observed time closest to, but not after, the time point. We can then calculate the probability of failure at the specified time point. For our example, we will use a time point of 1.5 years.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># build Cox model</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cox_model <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(ttcancer, cancer) <span class="sc">~</span> age <span class="sc">+</span> famhistory <span class="sc">+</span> marker, <span class="at">data =</span> df_surv)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># show summary of model results</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(cox_model, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="cslcrekmbz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#cslcrekmbz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#cslcrekmbz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#cslcrekmbz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#cslcrekmbz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#cslcrekmbz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#cslcrekmbz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#cslcrekmbz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#cslcrekmbz .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#cslcrekmbz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#cslcrekmbz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#cslcrekmbz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#cslcrekmbz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#cslcrekmbz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#cslcrekmbz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cslcrekmbz .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cslcrekmbz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#cslcrekmbz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#cslcrekmbz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cslcrekmbz .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#cslcrekmbz .gt_left {
+  text-align: left;
+}
+
+#cslcrekmbz .gt_center {
+  text-align: center;
+}
+
+#cslcrekmbz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#cslcrekmbz .gt_font_normal {
+  font-weight: normal;
+}
+
+#cslcrekmbz .gt_font_bold {
+  font-weight: bold;
+}
+
+#cslcrekmbz .gt_font_italic {
+  font-style: italic;
+}
+
+#cslcrekmbz .gt_super {
+  font-size: 65%;
+}
+
+#cslcrekmbz .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>HR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">age</td>
+<td class="gt_row gt_center">1.30</td>
+<td class="gt_row gt_center">1.24, 1.36</td>
+<td class="gt_row gt_center">&lt;0.001</td></tr>
+    <tr><td class="gt_row gt_left">famhistory</td>
+<td class="gt_row gt_center">2.19</td>
+<td class="gt_row gt_center">1.37, 3.48</td>
+<td class="gt_row gt_center">&lt;0.001</td></tr>
+    <tr><td class="gt_row gt_left">marker</td>
+<td class="gt_row gt_center">2.42</td>
+<td class="gt_row gt_center">2.09, 2.80</td>
+<td class="gt_row gt_center">&lt;0.001</td></tr>
+  </tbody>
+  
+  <tfoot>
+    <tr class="gt_footnotes">
+      <td colspan="4">
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks">
+            <em>1</em>
+          </sup>
+           
+          HR = Hazard Ratio, CI = Confidence Interval
+          <br />
+        </p>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
+# add model prediction to our data frame
+df_surv_updated &lt;-
+  broom::augment(
+    cox_model, 
+    newdata = df_surv %&gt;% mutate(ttcancer =  1.5),
+    type.predict = &quot;expected&quot;
+  ) %&gt;%
+    mutate(
+      pr_failure18 = 1 - exp(-.fitted)
+    ) %&gt;%
+    select(-.fitted, -.se.fit)
+<p>The code for running the decision curve analysis is straightforward after the probability of failure is calculated. All we have to do is specify the time point we are interested in. For our example, let us not only set the threshold from 0% to 50%, but also add smoothing. Results of a smoothed curve should always be compared with the unsmoothed curve to ensure accuracy.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(<span class="fu">Surv</span>(ttcancer, cancer) <span class="sc">~</span> pr_failure18, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_surv_updated,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">time =</span> <span class="fl">1.5</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">thresholds =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span> <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>This shows that using the model to inform clinical decisions will lead to superior outcomes for any decision associated with a threshold probability of above 2% or so.</p>
+</div>
+<div id="competing-risks" class="section level3">
+<h3>Competing Risks</h3>
+<p>Competing risks endpoints are handled similarly to survival endpoints. The outcome must be defined as a factor, with the lowest level called <code>&quot;censor&quot;</code>, and the other levels defining the events of interest. The <code>dca()</code> function will treat the first outcome listed as the outcome of interest.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(<span class="fu">Surv</span>(ttcancer, cancer_cr) <span class="sc">~</span> pr_failure18, </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_surv_updated,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">time =</span> <span class="fl">1.5</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">thresholds =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span> <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="case-control-data" class="section level2">
+<h2>Case-Control Data</h2>
+<p>Case-control data are handled similarly to binary data, expect that the prevalence of the outcome must be specified as it cannot be estimated from the data.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dca</span>(casecontrol <span class="sc">~</span> cancerpredmarker, </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_case_control,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">prevalence =</span> <span class="fl">0.15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">smooth =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Assuming &#39;1&#39; is [Event] and &#39;0&#39; is [non-Event]</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
