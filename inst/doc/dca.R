@@ -24,7 +24,7 @@ dca(cancer ~ famhistory, df_binary, thresholds = seq(0, 0.35, by = 0.01)) %>%
 
 ## -----------------------------------------------------------------------------
 glm(cancer ~ marker + age + famhistory, df_binary, family = binomial) %>%
-  broom::augment(newdata = df_binary, type.predict = "response") 
+  broom::augment(newdata = df_binary, type.predict = "response")
 
 ## -----------------------------------------------------------------------------
 dca(cancer ~ famhistory + cancerpredmarker, 
