@@ -4,12 +4,12 @@
 \alias{net_intervention_avoided}
 \title{Add Net Interventions Avoided}
 \usage{
-net_intervention_avoided(x, nper = 100)
+net_intervention_avoided(x, nper = 1)
 }
 \arguments{
 \item{x}{object of class \code{'dca'} calculated with \code{dca()}}
 
-\item{nper}{Number to report net interventions per. Default is 100.}
+\item{nper}{Number to report net interventions per. Default is 1}
 }
 \value{
 'dca' object
@@ -18,11 +18,18 @@ net_intervention_avoided(x, nper = 100)
 Add the number of net interventions avoided to \code{dca()} object.
 }
 \examples{
-dca(cancer ~ cancerpredmarker, data = df_binary) \%>\%
+dca(
+  cancer ~ cancerpredmarker,
+  data = df_binary
+) \%>\%
   net_intervention_avoided()
 
-dca(Surv(ttcancer, cancer) ~ cancerpredmarker, data = df_surv, time = 1) \%>\%
-  net_intervention_avoided()
+dca(
+  Surv(ttcancer, cancer) ~ cancerpredmarker,
+  data = df_surv,
+  time = 1
+) \%>\%
+  net_intervention_avoided(nper = 100)
 }
 \seealso{
 \code{\link[=dca]{dca()}}, \code{\link[=standardized_net_benefit]{standardized_net_benefit()}}, \code{\link[=plot.dca]{plot.dca()}}, \code{\link[=as_tibble.dca]{as_tibble.dca()}}

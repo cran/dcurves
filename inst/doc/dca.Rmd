@@ -102,7 +102,7 @@ A few points are worth noting.
 First, look at the green line, the net benefit for "treat all”, that is, biopsy everyone. 
 This crosses the y axis at the prevalence. Imagine that a man had a risk threshold of 14%, and asked his risk under the "biopsy all" strategy. He would be told that his risk was the prevalence (14%).
 When a patient's risk threshold is the same as his predicted risk, the net benefit of biopsying and not biopsying are the same.
-Second, the decision curve for the binary variable (family history of cancer, the brown line) crosses the "biopsy all men” line at 1 – negative predictive value and again, this is easily explained: the negative predictive value is 87%, so a patient with no family history of cancer has a probability of disease of 13%; a patient with a threshold probability less than this – for example, a patient who would opt for biopsy even if risk was 10% - should therefore be biopsied even if he/she had no family history of cancer. 
+Second, the decision curve for the binary variable (family history of cancer, the teal line) crosses the "biopsy all men” line at 1 – negative predictive value and again, this is easily explained: the negative predictive value is 87%, so a patient with no family history of cancer has a probability of disease of 13%; a patient with a threshold probability less than this – for example, a patient who would opt for biopsy even if risk was 10% - should therefore be biopsied even if he/she had no family history of cancer. 
 The decision curve for a binary variable is equivalent to biopsy no-one at the positive predictive value. 
 This is because for a binary variable, a patient with the characteristic is given a risk at the positive predictive
 value. 
@@ -123,7 +123,10 @@ df_binary_updated <-
   )
 
 # Run the decision curve
-dca(cancer ~ phat_Brown, df_binary_updated, thresholds = seq(0, 0.35, by = 0.01)) %>%
+dca(cancer ~ phat_Brown, 
+    data = df_binary_updated, 
+    thresholds = seq(0, 0.35, by = 0.01),
+    label = list(phat_Brown = "Brown Model")) %>%
   plot(smooth = TRUE)
 ```
 
@@ -245,13 +248,12 @@ This value was the “intervention avoided” column in the table that was saved
 ```{r}
 dca(cancer ~ marker, 
     data = df_binary, 
-    as_probability = "marker",
-    thresholds = seq(0, 0.35, by = 0.01)) %>%
+    as_probability = "marker") %>%
   net_intervention_avoided() %>%
   plot(smooth = TRUE)
 ```
 
-At a probability threshold of 15%, the net reduction in interventions is about 33 per 100 patients.
+At a probability threshold of 15%, the net reduction in interventions is about 0.33.
 In other words, at this probability threshold, biopsying patients on the basis of the marker is the equivalent of a strategy that reduced the biopsy rate by 33%, without missing any cancers. 
 
 ## Survival Outcomes
@@ -339,7 +341,7 @@ dca(Surv(ttcancer, cancer_cr) ~ pr_failure18,
 
 ## Case-Control Data
 
-Case-control data are handled similarly to binary data, expect that the prevalence of the outcome must be specified as it cannot be estimated from the data.
+Case-control data are handled similarly to binary data, except that the prevalence of the outcome must be specified as it cannot be estimated from the data.
 
 ```{r}
 dca(casecontrol ~ cancerpredmarker, 

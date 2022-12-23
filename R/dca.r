@@ -23,7 +23,7 @@
 #' @param thresholds vector of threshold probabilities between 0 and 1.
 #' Default is `seq(0, 0.99, by = 0.01)`. Thresholds at zero are replaced
 #' with 10e-10.
-#' @param label named list of variable labels, e.g. `list(age = "Age, years)`
+#' @param label named list of variable labels, e.g. `list(age = "Age, years")`
 #' @param harm named list of harms associated with a test. Default is `NULL`
 #' @param as_probability character vector including names of variables
 #' that will be converted to a probability. Details below.
@@ -112,8 +112,9 @@ dca <- function(formula, data, thresholds = seq(0, 0.99, by = 0.01),
                     .fns = ~dplyr::case_when(. == 0 ~ 0 - .Machine$double.eps,
                                              . == 1 ~ 1 + .Machine$double.eps,
                                              TRUE ~ .)),
-      .after = .data[[outcome_name]]
-    )
+      .after = all_of(outcome_name)
+    ) %>%
+    copy_labels_from(model_frame)
 
   # calculate net benefit ------------------------------------------------------
   dca_result <-
@@ -229,7 +230,7 @@ dca <- function(formula, data, thresholds = seq(0, 0.99, by = 0.01),
 
   df_tidy %>%
     dplyr::slice_tail() %>%
-    dplyr::pull(.data$estimate)
+    dplyr::pull("estimate")
 }
 
 .as_probability <- function(model_frame, outcome_name, outcome_type, as_probability, time) {
@@ -247,5 +248,13 @@ dca <- function(formula, data, thresholds = seq(0, 0.99, by = 0.01),
   .check_probability_range(model_frame, outcome_name)
 
   model_frame
+}
+
+
+copy_labels_from <- function(x, y) {
+  for (v in names(x)) {
+    attr(x[[v]], "label") <- attr(y[[v]], "label") %||% attr(x[[v]], "label")
+  }
+  x
 }
 

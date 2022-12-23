@@ -1,3 +1,9 @@
+# dcurves 0.4.0
+
+* The net interventions avoided figures have new defaults (breaking change):
+  - The figure will now include the treat all and treat none reference lines.
+  - The `nper` now defaults to one.
+
 # dcurves 0.3.0
 
 * Added function `test_consequences()` to calculate the diagnostic accuracy of a risk at several thresholds.

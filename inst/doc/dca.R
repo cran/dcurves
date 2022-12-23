@@ -43,7 +43,10 @@ df_binary_updated <-
   )
 
 # Run the decision curve
-dca(cancer ~ phat_Brown, df_binary_updated, thresholds = seq(0, 0.35, by = 0.01)) %>%
+dca(cancer ~ phat_Brown, 
+    data = df_binary_updated, 
+    thresholds = seq(0, 0.35, by = 0.01),
+    label = list(phat_Brown = "Brown Model")) %>%
   plot(smooth = TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -96,8 +99,7 @@ dca_with_harms %>%
 ## -----------------------------------------------------------------------------
 dca(cancer ~ marker, 
     data = df_binary, 
-    as_probability = "marker",
-    thresholds = seq(0, 0.35, by = 0.01)) %>%
+    as_probability = "marker") %>%
   net_intervention_avoided() %>%
   plot(smooth = TRUE)
 
