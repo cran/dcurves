@@ -1,3 +1,7 @@
+# dcurves 0.5.1
+
+* HTML5 documentation update to satisfy CRAN requirement.
+
 # dcurves 0.5.0
 
 * Added {broom.helpers} package to the Suggests field, which accounts for an update in gtsummary v2.0
